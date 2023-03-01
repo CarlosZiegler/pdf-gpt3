@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
-import { useCredentials } from "@/context/credentials-context"
 import { Bot, Loader2, Send, UploadCloud, User } from "lucide-react"
 import { useDropzone } from "react-dropzone"
 
@@ -10,7 +9,7 @@ import { cn } from "@/lib/utils"
 import { Layout } from "@/components/layout"
 import { Button } from "@/components/ui/button"
 
-const DEFAULT_QUESTION = "what is this about?"
+const DEFAULT_QUESTION = ""
 
 export default function IndexPage() {
   const [files, setFiles] = useState(null)
@@ -18,7 +17,6 @@ export default function IndexPage() {
   const [isUploading, setIsUploading] = useState(false)
   const [isAsking, setIsAsking] = useState(false)
   const [chatHistory, setChatHistory] = useState([])
-  const credentials = useCredentials()
 
   const handleQueryChange = (e) => {
     setQuestion(e.target.value)
@@ -30,8 +28,6 @@ export default function IndexPage() {
 
   const handleUpload = useCallback(async () => {
     const formData = new FormData()
-    formData.append("openai-api-key", credentials.openaiApiKey)
-    formData.append("pinecone-api-key", credentials.pineconeApiKey)
     Array.from(files).forEach((file: File) => {
       formData.append("file", file)
     })
@@ -42,7 +38,7 @@ export default function IndexPage() {
       body: formData,
     })
     setIsUploading(false)
-  }, [files, credentials])
+  }, [files])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -55,6 +51,9 @@ export default function IndexPage() {
   })
 
   const handleSubmit = useCallback(async () => {
+    if (!question) {
+      return
+    }
     setIsAsking(true)
     setQuestion("")
     setChatHistory([
@@ -67,7 +66,6 @@ export default function IndexPage() {
 
     const response = await fetch("/api/chat", {
       body: JSON.stringify({
-        credentials,
         question,
         chatHistory: chatHistory.reduce((prev, curr) => {
           prev += curr.content
@@ -90,9 +88,7 @@ export default function IndexPage() {
     ])
 
     setIsAsking(false)
-  }, [question, chatHistory, credentials])
-
-  console.log({ credentials })
+  }, [question, chatHistory])
 
   return (
     <Layout>
@@ -130,27 +126,9 @@ export default function IndexPage() {
               )}
             </div>
           </div>
-          <div>
-            This app needs you to{" "}
-            <Link
-              className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
-              href="/credentials"
-              rel="noreferrer"
-            >
-              add credentials
-            </Link>{" "}
-            to work properly.
-          </div>
+
           <div className="self-start">
-            <Button
-              disabled={
-                !files ||
-                isUploading ||
-                !credentials.openaiApiKey ||
-                !credentials.pineconeApiKey
-              }
-              onClick={handleUpload}
-            >
+            <Button disabled={!files || isUploading} onClick={handleUpload}>
               {!isUploading ? (
                 <UploadCloud className="mr-2 h-4 w-4" />
               ) : (
@@ -219,7 +197,7 @@ export default function IndexPage() {
                   className="mr-2 w-full rounded-md border border-gray-400 pl-2 text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
                 />
                 <div className="items-center sm:flex">
-                  <Button onClick={handleSubmit}>
+                  <Button onClick={handleSubmit} disabled={!question}>
                     {!isAsking ? (
                       <Send className="h-4 w-4" />
                     ) : (

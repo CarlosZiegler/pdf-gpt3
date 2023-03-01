@@ -8,7 +8,7 @@ import { PineconeStore } from "langchain/vectorstores"
 import { fileConsumer, formidablePromise } from "@/lib/formidable"
 import { getTextContentFromPDF } from "@/lib/pdf"
 
-const PINECONE_INDEX_NAME = "book-gpt"
+const PINECONE_INDEX_NAME = "data-gpt"
 
 const formidableConfig = {
   keepExtensions: true,
@@ -17,6 +17,11 @@ const formidableConfig = {
   maxFields: 7,
   allowEmptyFiles: false,
   multiples: false,
+}
+
+const credentials = {
+  openaiApiKey: "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",
+  pineconeApiKey: "7eea53e0-1492-4637-a912-bba52b620683",
 }
 
 export async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -29,8 +34,8 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
   })
 
   const fileData = Buffer.concat(chunks)
-  const openaiApiKey = fields["openai-api-key"]
-  const pineconeApiKey = fields["pinecone-api-key"]
+  const openaiApiKey = process.env.OPENAI_API_KEY
+  const pineconeApiKey = process.env.PINECONE_API_KEY
 
   const { file } = files
   let fileText = ""
@@ -57,8 +62,9 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
   const docs = textSplitter.splitDocuments([rawDocs])
 
   const pinecone = new PineconeClient()
+
   await pinecone.init({
-    environment: "us-west1-gcp",
+    environment: "us-east1-gcp",
     apiKey: pineconeApiKey,
   })
 

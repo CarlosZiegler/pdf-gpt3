@@ -4,27 +4,15 @@ interface SiteConfig {
   name: string
   description: string
   mainNav: NavItem[]
-  links: {
-    twitter: string
-    github: string
-  }
 }
 
 export const siteConfig: SiteConfig = {
-  name: "BookGPT",
-  description: "Upload a book, start asking question",
+  name: "DataGPT",
+  description: "Upload a PDF, start asking question",
   mainNav: [
     {
       title: "Home",
       href: "/",
     },
-    {
-      title: "Credentials",
-      href: "/credentials",
-    },
   ],
-  links: {
-    twitter: "https://twitter.com/fraserxu",
-    github: "https://github.com/fraserxu/book-gpt",
-  },
 }
