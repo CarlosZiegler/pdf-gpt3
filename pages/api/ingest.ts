@@ -19,11 +19,6 @@ const formidableConfig = {
   multiples: false,
 }
 
-const credentials = {
-  openaiApiKey: "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",
-  pineconeApiKey: "7eea53e0-1492-4637-a912-bba52b620683",
-}
-
 export async function handler(req: NextApiRequest, res: NextApiResponse) {
   const chunks: never[] = []
 
@@ -59,7 +54,7 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
     chunkSize: 1000,
     chunkOverlap: 200,
   })
-  const docs = textSplitter.splitDocuments([rawDocs])
+  const docs = await textSplitter.splitDocuments([rawDocs])
 
   const pinecone = new PineconeClient()
 

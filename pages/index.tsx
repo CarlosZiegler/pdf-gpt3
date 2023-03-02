@@ -63,31 +63,34 @@ export default function IndexPage() {
         content: question,
       },
     ])
+    try {
+      const response = await fetch("/api/chat", {
+        body: JSON.stringify({
+          question,
+          chatHistory: chatHistory.reduce((prev, curr) => {
+            prev += curr.content
+            return prev
+          }, ""),
+        }),
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+      })
+      const answer = await response.json()
 
-    const response = await fetch("/api/chat", {
-      body: JSON.stringify({
-        question,
-        chatHistory: chatHistory.reduce((prev, curr) => {
-          prev += curr.content
-          return prev
-        }, ""),
-      }),
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-    })
-    const answer = await response.json()
+      setChatHistory((currentChatHistory) => [
+        ...currentChatHistory,
+        {
+          from: "bot",
+          content: answer.text,
+        },
+      ])
 
-    setChatHistory((currentChatHistory) => [
-      ...currentChatHistory,
-      {
-        from: "bot",
-        content: answer.text,
-      },
-    ])
-
-    setIsAsking(false)
+      setIsAsking(false)
+    } catch (error) {
+      console.log(error)
+    }
   }, [question, chatHistory])
 
   return (
@@ -101,7 +104,7 @@ export default function IndexPage() {
       <section className="container flex justify-items-stretch gap-6 pt-6 pb-8 md:py-10">
         <div className="flex min-w-[500px] flex-col items-start gap-2 ">
           <h2 className="mt-10 scroll-m-20 pb-2 text-2xl font-semibold tracking-tight transition-colors first:mt-0">
-            Upload a book
+            Upload a PDF
           </h2>
           <div
             className="min-w-full rounded-md border border-slate-200 p-0 dark:border-slate-700"
@@ -141,7 +144,7 @@ export default function IndexPage() {
 
         <div className="flex grow flex-col items-start gap-2">
           <h2 className="mt-10 scroll-m-20 pb-2 text-2xl font-semibold tracking-tight transition-colors first:mt-0">
-            Ask me anything about the book
+            Ask me anything about the PDF
           </h2>
 
           <div className="w-full">

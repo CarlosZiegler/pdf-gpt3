@@ -36,7 +36,7 @@ export default async function handler(
   const response = await chain.call({
     question,
     max_tokens: 4000, // todo: pick up a sensible value
-    temperature: 1,
+    temperature: 0,
     chat_history: chatHistory || [],
   })
 
