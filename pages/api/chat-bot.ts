@@ -19,7 +19,6 @@ export default async function handler(
       max_tokens: 4000,
       temperature: 0.4,
     })
-    console.log(completion)
     const response = completion.data.choices[0].message
 
     res.status(200).json(response)

@@ -7,7 +7,7 @@ interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: "DataGPT",
+  name: "CarlosGPT",
   description: "Upload a PDF, start asking question",
   mainNav: [
     {
