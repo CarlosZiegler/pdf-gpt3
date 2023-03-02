@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import { PineconeClient } from "@pinecone-database/pinecone"
 import { ChatVectorDBQAChain } from "langchain/chains"
 import { OpenAIEmbeddings } from "langchain/embeddings"
-import { OpenAI } from "langchain/llms"
+import { OpenAI, OpenAIChat } from "langchain/llms"
 import { PineconeStore } from "langchain/vectorstores"
 
 const PINECONE_INDEX_NAME = "data-gpt"
@@ -28,14 +28,14 @@ export default async function handler(
     })
   )
 
-  const model = new OpenAI({
+  const model = new OpenAIChat({
     openAIApiKey: process.env.OPENAI_API_KEY,
   })
 
   const chain = ChatVectorDBQAChain.fromLLM(model, vectorStore)
   const response = await chain.call({
     question,
-    max_tokens: 4000, // todo: pick up a sensible value
+    max_tokens: 1000, // todo: pick up a sensible value
     temperature: 0,
     chat_history: chatHistory || [],
   })

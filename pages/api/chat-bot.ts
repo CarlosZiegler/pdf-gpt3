@@ -15,7 +15,7 @@ export default async function handler(
 
     const completion = await model.createChatCompletion({
       model: "gpt-3.5-turbo",
-      messages: [...chatHistory, { role: "user", content: question }],
+      messages: [{ role: "user", content: question }],
       max_tokens: 4000,
       temperature: 0.4,
     })
