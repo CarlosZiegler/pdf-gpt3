@@ -190,26 +190,28 @@ export default function IndexPage() {
               })}
             </div>
 
+              <form>
             <div className="mb-2 pt-4 sm:mb-0">
-              <div className="relative flex">
-                <input
-                  type="text"
-                  value={question}
-                  placeholder={DEFAULT_QUESTION}
-                  onChange={handleQueryChange}
-                  className="mr-2 w-full rounded-md border border-gray-400 pl-2 text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
-                />
-                <div className="items-center sm:flex">
-                  <Button onClick={handleSubmit} disabled={!question}>
-                    {!isAsking ? (
-                      <Send className="h-4 w-4" />
-                    ) : (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    )}
-                  </Button>
+                <div className="relative flex">
+                  <input
+                    type="text"
+                    value={question}
+                    placeholder={DEFAULT_QUESTION}
+                    onChange={handleQueryChange}
+                    className="mr-2 w-full rounded-md border border-gray-400 pl-2 text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
+                    />
+                  <div className="items-center sm:flex">
+                    <Button onClick={handleSubmit} disabled={!question} type="submit">
+                      {!isAsking ? (
+                        <Send className="h-4 w-4" />
+                        ) : (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          )}
+                    </Button>
+                  </div>
                 </div>
-              </div>
             </div>
+             </form>
           </div>
         </div>
       </section>
