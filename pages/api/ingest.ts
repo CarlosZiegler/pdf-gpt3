@@ -12,8 +12,8 @@ const PINECONE_INDEX_NAME = "data-gpt"
 
 const formidableConfig = {
   keepExtensions: true,
-  maxFileSize: 10_000_000,
-  maxFieldsSize: 10_000_000,
+  maxFileSize: 20_000_000,
+  maxFieldsSize: 30_000_000,
   maxFields: 7,
   allowEmptyFiles: false,
   multiples: false,
@@ -69,7 +69,10 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
     docs,
     new OpenAIEmbeddings({
       openAIApiKey: openaiApiKey,
-    })
+    }),
+
+    undefined,
+    "" // namespace to separate documents
   )
 
   res.status(200).json({})

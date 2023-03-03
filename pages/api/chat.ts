@@ -25,7 +25,9 @@ export default async function handler(
     index,
     new OpenAIEmbeddings({
       openAIApiKey: process.env.OPENAI_API_KEY,
-    })
+    }),
+    undefined,
+    "" // namespace to get specific documents
   )
 
   const model = new OpenAIChat({
