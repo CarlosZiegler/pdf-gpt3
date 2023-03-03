@@ -17,7 +17,7 @@ export default async function handler(
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: question }],
       max_tokens: 4000,
-      temperature: 0.4,
+      temperature: 0,
     })
     const response = completion.data.choices[0].message
 
