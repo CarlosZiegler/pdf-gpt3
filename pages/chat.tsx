@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
+import { cn } from "@/providers/utils"
 import { Bot, Loader2, Send, User } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
 import { Layout } from "@/components/layout"
 import { Button } from "@/components/ui/button"
 
@@ -123,26 +123,26 @@ export default function IndexPage() {
             <form>
               <div className="mb-2 pt-4 sm:mb-0">
                 <div className="relative flex">
-                    <input
-                      type="text"
-                      value={question}
-                      placeholder={DEFAULT_QUESTION}
-                      onChange={handleQueryChange}
-                      className="mr-2 w-full rounded-md border border-gray-400 pl-2 text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
-                    />
-                    <div className="items-center sm:flex">
-                      <Button
-                        onClick={handleSubmit}
-                        disabled={!question}
-                        type="submit"
-                      >
-                        {!isAsking ? (
-                          <Send className="h-4 w-4" />
-                        ) : (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        )}
-                      </Button>
-                    </div>
+                  <input
+                    type="text"
+                    value={question}
+                    placeholder={DEFAULT_QUESTION}
+                    onChange={handleQueryChange}
+                    className="mr-2 w-full rounded-md border border-gray-400 pl-2 text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
+                  />
+                  <div className="items-center sm:flex">
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={!question}
+                      type="submit"
+                    >
+                      {!isAsking ? (
+                        <Send className="h-4 w-4" />
+                      ) : (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      )}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </form>

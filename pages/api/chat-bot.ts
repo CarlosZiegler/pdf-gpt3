@@ -11,7 +11,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const { question, chatHistory } = req.body
+    const { question } = req.body
 
     const completion = await model.createChatCompletion({
       model: "gpt-3.5-turbo",
