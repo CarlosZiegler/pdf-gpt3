@@ -1,6 +1,5 @@
 import { ChatVectorDBQAChain } from "langchain/chains"
-import { OpenAI, OpenAIChat } from "langchain/llms"
-import { PromptTemplate } from "langchain/prompts"
+import { OpenAIChat } from "langchain/llms"
 import { PineconeStore } from "langchain/vectorstores"
 
 import { envs } from "../envs"

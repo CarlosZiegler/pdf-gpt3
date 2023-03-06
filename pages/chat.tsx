@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from "react"
 import Head from "next/head"
-import Link from "next/link"
 import { cn } from "@/providers/utils"
 import { Bot, Loader2, Send, User } from "lucide-react"
+import md from "markdown-it"
 
 import { siteConfig } from "@/config/site"
 import { Layout } from "@/components/layout"
@@ -98,7 +98,7 @@ export default function IndexPage() {
                         <div>
                           <span
                             className={cn(
-                              "inline-block rounded-lg bg-gray-300 px-4 py-2 text-gray-600",
+                              "scrolling-auto overflow-auto inline-block rounded-lg bg-gray-300 px-4 py-2 text-gray-600",
                               chat.role === "user" &&
                                 "rounded-bl-none bg-gray-300 text-gray-600",
                               chat.role === "assistant" &&
