@@ -1,16 +1,24 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { getResponseFromChain } from "@/providers/chain.provider"
-import { createDocumentsFromUrl } from "@/providers/document.provider"
 import { getVectorFromPineconeStore } from "@/providers/pinecone.provider"
-import { GitbookLoader } from "langchain/document_loaders"
+import { z } from "zod"
+
+const chatSchema = z.object({
+  namespace: z.string().optional(),
+  question: z.string(),
+  // chatHistory: z.array(z.string()).optional(),
+  chatHistory: z.any(),
+})
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { question, chatHistory } = req.body
+  const { question, chatHistory, namespace } = await chatSchema.parseAsync(
+    req.body
+  )
 
-  const vectorStore = await getVectorFromPineconeStore()
+  const vectorStore = await getVectorFromPineconeStore(namespace)
   const response = await getResponseFromChain(
     vectorStore,
     question,

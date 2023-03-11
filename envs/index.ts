@@ -15,6 +15,7 @@ export const serverSchema = z.object({
   // DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
   PINECONE_API_KEY: z.string(),
+  PINECONE_NEW_API_KEY: z.string(),
   OPENAI_API_KEY: z.string(),
 })
 

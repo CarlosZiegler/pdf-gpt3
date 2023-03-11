@@ -39,14 +39,14 @@ export default async function handler(
       SystemMessagePromptTemplate.fromTemplate(`Assistant:`),
     ])
 
-    const responseA = await chat.generatePrompt([
+    const response = await chat.generatePrompt([
       await chatPrompt.formatPromptValue({
         history: chatHistory.join(","),
         human_input: question,
       }),
     ])
 
-    res.status(200).json({ content: responseA.generations[0][0].text })
+    res.status(200).json({ content: response.generations[0][0].text })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: error.message })

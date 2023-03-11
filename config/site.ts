@@ -18,5 +18,9 @@ export const siteConfig: SiteConfig = {
       title: "chat",
       href: "/chat",
     },
+    {
+      title: "report",
+      href: "/report",
+    },
   ],
 }

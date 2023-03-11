@@ -6,6 +6,7 @@ import { PineconeStore } from "langchain/vectorstores"
 import { envs } from "../envs"
 
 const PINECONE_INDEX_NAME = "data-gpt"
+const SMART_DOCU_INDEX_NAME = "smart-docus"
 
 export const storeDocsInPineconeStore = async (
   docs: Document[],
@@ -14,11 +15,13 @@ export const storeDocsInPineconeStore = async (
   const pinecone = new PineconeClient()
 
   await pinecone.init({
-    environment: "us-east1-gcp",
-    apiKey: envs.PINECONE_API_KEY,
+    environment: namespace ? "us-east-1-aws" : "us-east1-gcp",
+    apiKey: namespace ? envs.PINECONE_NEW_API_KEY : envs.PINECONE_API_KEY,
   })
 
-  const index = pinecone.Index(PINECONE_INDEX_NAME)
+  const index = pinecone.Index(
+    namespace ? SMART_DOCU_INDEX_NAME : PINECONE_INDEX_NAME
+  )
   await PineconeStore.fromDocuments(
     index,
     docs,
@@ -33,11 +36,13 @@ export const getVectorFromPineconeStore = async (namespace?: string) => {
   const pinecone = new PineconeClient()
 
   await pinecone.init({
-    environment: "us-east1-gcp",
-    apiKey: envs.PINECONE_API_KEY,
+    environment: namespace ? "us-east-1-aws" : "us-east1-gcp",
+    apiKey: namespace ? envs.PINECONE_NEW_API_KEY : envs.PINECONE_API_KEY,
   })
 
-  const index = pinecone.Index(PINECONE_INDEX_NAME)
+  const index = pinecone.Index(
+    namespace ? SMART_DOCU_INDEX_NAME : PINECONE_INDEX_NAME
+  )
   const vectorStore = await PineconeStore.fromExistingIndex(
     index,
     new OpenAIEmbeddings({
@@ -46,5 +51,6 @@ export const getVectorFromPineconeStore = async (namespace?: string) => {
     undefined,
     namespace // namespace to get specific documents
   )
+
   return vectorStore
 }

@@ -1,9 +1,8 @@
 import React, { useCallback, useState } from "react"
 import Head from "next/head"
-import Link from "next/link"
 import { cn } from "@/providers/utils"
-import { Bot, Loader2, Send, UploadCloud, User } from "lucide-react"
-import { useDropzone } from "react-dropzone"
+import { Bot, Loader2, Send, User } from "lucide-react"
+import md from "markdown-it"
 
 import { siteConfig } from "@/config/site"
 import { Layout } from "@/components/layout"
@@ -12,50 +11,14 @@ import { Button } from "@/components/ui/button"
 const DEFAULT_QUESTION = ""
 
 export default function IndexPage() {
-  const [files, setFiles] = useState(null)
   const [question, setQuestion] = useState(DEFAULT_QUESTION)
-  const [namespace, setNamespace] = useState("")
-  const [isUploading, setIsUploading] = useState(false)
+
   const [isAsking, setIsAsking] = useState(false)
   const [chatHistory, setChatHistory] = useState([])
 
-  const handleNamespaceChange = (e) => {
-    setNamespace(e.target.value)
-  }
   const handleQueryChange = (e) => {
     setQuestion(e.target.value)
   }
-
-  const onDrop = useCallback((acceptedFiles) => {
-    setFiles(acceptedFiles)
-  }, [])
-
-  const handleUpload = useCallback(async () => {
-    const formData = new FormData()
-    Array.from(files).forEach((file: File) => {
-      formData.append("file", file)
-    })
-
-    setIsUploading(true)
-    await fetch("/api/ingest", {
-      method: "post",
-      body: formData,
-      headers: {
-        namespace: !!namespace ? namespace : undefined,
-      },
-    })
-    setIsUploading(false)
-  }, [files])
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: {
-      "application/pdf": [".pdf"],
-      "text/plain": [".txt", ".md"],
-    },
-    multiple: false,
-    maxFiles: 1,
-  })
 
   const handleSubmit = useCallback(async () => {
     if (!question) {
@@ -66,27 +29,25 @@ export default function IndexPage() {
     setChatHistory([
       ...chatHistory,
       {
-        from: "user",
+        role: "user",
         content: question,
       },
     ])
-    try {
-      const response = await fetch("/api/chat", {
-        body: JSON.stringify({
-          question,
-          chatHistory: chatHistory.reduce((prev, curr) => {
-            prev += curr.content
-            return prev
-          }, ""),
-          namespace: !!namespace ? namespace : undefined,
-        }),
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-      })
-      const answer = await response.json()
 
+    const response = await fetch("/api/chat", {
+      body: JSON.stringify({
+        question,
+        chatHistory,
+        namespace: "report2",
+      }),
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+    const answer = await response.json()
+
+    if (answer.text) {
       setChatHistory((currentChatHistory) => [
         ...currentChatHistory,
         {
@@ -94,13 +55,15 @@ export default function IndexPage() {
           content: answer.text,
         },
       ])
-
-      setIsAsking(false)
-    } catch (error) {
-      console.log(error)
     }
+    if (answer.error) {
+      console.error(answer.error)
+    }
+
+    setIsAsking(false)
   }, [question, chatHistory])
 
+  console.log(chatHistory)
   return (
     <Layout>
       <Head>
@@ -110,59 +73,9 @@ export default function IndexPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container flex justify-items-stretch gap-6 pt-6 pb-8 md:py-10">
-        <div className="flex min-w-[500px] flex-col items-start gap-2 ">
-          <h2 className="mt-10 scroll-m-20 pb-2 text-2xl font-semibold tracking-tight transition-colors first:mt-0">
-            Upload a PDF
-          </h2>
-          <div
-            className="min-w-full rounded-md border border-slate-200 p-0 dark:border-slate-700"
-            {...getRootProps()}
-          >
-            <div className="flex min-h-[150px] cursor-pointer items-center justify-center p-10">
-              <input {...getInputProps()} />
-
-              {files ? (
-                <p>{files[0].name}</p>
-              ) : (
-                <>
-                  {isDragActive ? (
-                    <p>Drop the files here ...</p>
-                  ) : (
-                    <p>
-                      Drag and drop a file(.pdf, .txt, .md) here, or click to
-                      select file
-                    </p>
-                  )}
-                </>
-              )}
-            </div>
-          </div>
-          <div className="flex min-w-full">
-            <label className="flex " htmlFor="namespace">
-              Namespace: {namespace}
-            </label>
-            <input
-              type="text"
-              onChange={handleNamespaceChange}
-              className="mr-1 min-w-fit rounded-md border border-gray-400 pl-2 text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
-            />
-          </div>
-
-          <div className="self-start">
-            <Button disabled={!files || isUploading} onClick={handleUpload}>
-              {!isUploading ? (
-                <UploadCloud className="mr-2 h-4 w-4" />
-              ) : (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              Upload
-            </Button>
-          </div>
-        </div>
-
         <div className="flex grow flex-col items-start gap-2">
           <h2 className="mt-10 scroll-m-20 pb-2 text-2xl font-semibold tracking-tight transition-colors first:mt-0">
-            Ask me anything about the PDF
+            Talk with me about report hash 7d059d8bd3deb6be7b812fc0406f1705
           </h2>
 
           <div className="w-full">
@@ -174,22 +87,22 @@ export default function IndexPage() {
                       className={cn(
                         "flex",
                         "items-end",
-                        chat.from === "bot" && "justify-end"
+                        chat.role === "assistant" && "justify-end"
                       )}
                     >
                       <div
                         className={cn(
                           "order-2 mx-2 flex max-w-xs flex-col items-start space-y-2 text-xs",
-                          chat.from === "bot" && "order-1"
+                          chat.role === "assistant" && "order-1"
                         )}
                       >
                         <div>
                           <span
                             className={cn(
-                              "inline-block rounded-lg bg-gray-300 px-4 py-2 text-gray-600",
-                              chat.from === "user" &&
+                              "scrolling-auto overflow-auto inline-block rounded-lg bg-gray-300 px-4 py-2 text-gray-600",
+                              chat.role === "user" &&
                                 "rounded-bl-none bg-gray-300 text-gray-600",
-                              chat.from === "bot" &&
+                              chat.role === "assistant" &&
                                 "rounded-br-none bg-blue-600 text-white"
                             )}
                           >
@@ -197,7 +110,7 @@ export default function IndexPage() {
                           </span>
                         </div>
                       </div>
-                      {chat.from === "user" ? (
+                      {chat.role === "user" ? (
                         <User className="order-1 h-4 w-4" />
                       ) : (
                         <Bot className="order-1 h-4 w-4" />
