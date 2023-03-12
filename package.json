@@ -13,6 +13,11 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@mantine/core": "^6.0.1",
+    "@mantine/hooks": "^6.0.1",
+    "@mantine/modals": "^6.0.1",
+    "@mantine/spotlight": "^6.0.1",
     "@next/font": "^13.1.6",
     "@pinecone-database/pinecone": "^0.0.8",
     "@radix-ui/react-accessible-icon": "^1.0.1",
@@ -44,6 +49,7 @@
     "@radix-ui/react-toggle-group": "^1.0.1",
     "@radix-ui/react-tooltip": "^1.0.3",
     "@supabase/supabase-js": "^2.10.0",
+    "@tabler/icons-react": "^2.10.0",
     "@types/formidable": "^2.0.5",
     "cheerio": "^1.0.0-rc.12",
     "class-variance-authority": "^0.4.0",

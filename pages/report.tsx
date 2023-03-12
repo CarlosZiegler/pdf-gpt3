@@ -1,6 +1,18 @@
 import React, { useCallback, useState } from "react"
 import Head from "next/head"
 import { cn } from "@/providers/utils"
+import { Group, Button as MantineButton } from "@mantine/core"
+import {
+  SpotlightProvider,
+  spotlight,
+  type SpotlightAction,
+} from "@mantine/spotlight"
+import {
+  IconDashboard,
+  IconFileText,
+  IconHome,
+  IconSearch,
+} from "@tabler/icons-react"
 import { Bot, Loader2, Send, User } from "lucide-react"
 import md from "markdown-it"
 
@@ -64,6 +76,27 @@ export default function IndexPage() {
   }, [question, chatHistory])
 
   console.log(chatHistory)
+
+  const actions: SpotlightAction[] = [
+    {
+      title: "Home",
+      description: "Get to home page",
+      onTrigger: () => console.log("Home"),
+      icon: <IconHome size="1.2rem" />,
+    },
+    {
+      title: "Dashboard",
+      description: "Get full information about current system status",
+      onTrigger: () => console.log("Dashboard"),
+      icon: <IconDashboard size="1.2rem" />,
+    },
+    {
+      title: "Documentation",
+      description: "Visit documentation to lean more about all features",
+      onTrigger: () => console.log("Documentation"),
+      icon: <IconFileText size="1.2rem" />,
+    },
+  ]
   return (
     <Layout>
       <Head>

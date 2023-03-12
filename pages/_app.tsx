@@ -3,6 +3,7 @@ import { Inter as FontSans } from "@next/font/google"
 import { ThemeProvider } from "next-themes"
 
 import "@/styles/globals.css"
+import { ModalsProvider } from "@mantine/modals"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -19,7 +20,9 @@ export default function App({ Component, pageProps }: AppProps) {
 				}
 			}`}</style>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <Component {...pageProps} />
+        <ModalsProvider>
+          <Component {...pageProps} />
+        </ModalsProvider>
       </ThemeProvider>
     </>
   )
