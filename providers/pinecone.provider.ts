@@ -28,7 +28,7 @@ export const storeDocsInPineconeStore = async (
     new OpenAIEmbeddings({
       openAIApiKey: envs.OPENAI_API_KEY,
     }),
-    undefined,
+    "text",
     namespace // namespace to separate documents
   )
 }
@@ -48,7 +48,7 @@ export const getVectorFromPineconeStore = async (namespace?: string) => {
     new OpenAIEmbeddings({
       openAIApiKey: envs.OPENAI_API_KEY,
     }),
-    undefined,
+    "text",
     namespace // namespace to get specific documents
   )
 

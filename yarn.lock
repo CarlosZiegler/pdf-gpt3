@@ -610,10 +610,12 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@pinecone-database/pinecone@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@pinecone-database/pinecone/-/pinecone-0.0.8.tgz#309069895b607e903d4d8e4660ef0ecdf145681f"
-  integrity sha512-oz/fG4YfD/N1D/9gJ0LF3z4u8vfXdn8DxQ2qSgrJJQyVoh2LiUEht8udj/7wnJTtOBtcCFIB+l7Rc1l5fXIUCw==
+"@pinecone-database/pinecone@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@pinecone-database/pinecone/-/pinecone-0.0.10.tgz#c8ad15f952f4f21dd14d621d5947e7ad213e1b2f"
+  integrity sha512-SwfobqOmSQvEkEtw44uc6ZZ9R/aU5bDYkBAX0cGOcSk6wWlm5yiJA+XeZkyMeUsFb1EQaGhbafIy97TDqcnnsw==
+  dependencies:
+    cross-fetch "^3.1.5"
 
 "@radix-ui/number@1.0.0":
   version "1.0.0"
@@ -3635,10 +3637,10 @@ jsonpointer@^5.0.1:
     array-includes "^3.1.5"
     object.assign "^4.1.3"
 
-langchain@^0.0.27:
-  version "0.0.27"
-  resolved "https://registry.yarnpkg.com/langchain/-/langchain-0.0.27.tgz#00487489a198ab02d750bd5de221bda6819161d3"
-  integrity sha512-/uy0gAZjN4zb4yo+tmeVl5mjA3QzF8VglsxzRfDosxl6wNtISERVHuMYcwdtheC1PKSk8cxY4CpxSF3T610Hxg==
+langchain@^0.0.29:
+  version "0.0.29"
+  resolved "https://registry.yarnpkg.com/langchain/-/langchain-0.0.29.tgz#340db6c010c1fe542a24696b3cb0f6f8577bb36b"
+  integrity sha512-6HbLHtytxV3LmxT25L19BQdlgumm2b+8CtGChyUE7MadLyGgP8+OpuyrBkOe/sBYX3kZxLgfdl7ZMPWBqYLsvQ==
   dependencies:
     browser-or-node "^2.1.1"
     d3-dsv "^3.0.1"
