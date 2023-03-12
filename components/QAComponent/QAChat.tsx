@@ -29,7 +29,7 @@ export function QAChat() {
   const [chatHistory, setChatHistory] = useState<any>([
     {
       from: "bot",
-      content: "Hi, how can I help you?",
+      content: "Hi have all content of www.prea.eu, how can I help you?",
     },
   ])
 
@@ -55,7 +55,7 @@ export function QAChat() {
       body: JSON.stringify({
         question,
         chatHistory,
-        namespace: "report2",
+        namespace: "prea-website",
       }),
       method: "POST",
       headers: {
